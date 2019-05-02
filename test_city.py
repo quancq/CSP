@@ -58,7 +58,8 @@ for w_ind in range(51,151):
 	res_path = os.path.join(out_path, '%03d'%int(str(w_ind)))
 	if not os.path.exists(res_path):
 		os.makedirs(res_path)
-	res_path = os.path.join(res_path, 'val_det.txt')
+	# res_path = os.path.join(res_path, 'val_det.txt')
+	res_path = os.path.join(res_path, 'val_dt.json')
 	print res_path
 	# res_file = os.path.join(res_path, 'val_det.txt')
 	res_all = []
@@ -94,7 +95,8 @@ for w_ind in range(51,151):
 			if f == 0:
 				print(len(boxes), boxes.shape)
 			for box in boxes:
-				left, top, width, height, conf = box
+				left, top, width, height, conf = box[0], box[1], box[2], box[3], box[4]
+				left, top, width, height, conf = int(left), int(top), int(width), int(height), float(conf)
 				res_all.append(dict(image_id=f+1, img_name=img_name, category_id=1, score=conf,
                                    bbox=[left, top, width, height]))
 
