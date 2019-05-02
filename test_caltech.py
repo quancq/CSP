@@ -8,7 +8,7 @@ from keras_csp import config, bbox_process
 from keras_csp.utilsfunc import *
 from keras_csp import resnet50 as nn
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '1'
+os.environ["CUDA_VISIBLE_DEVICES"] = '0,1'
 C = config.Config()
 C.offset = True
 cache_path = 'data/cache/caltech/test'

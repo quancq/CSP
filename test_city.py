@@ -60,7 +60,9 @@ for w_ind in range(51,151):
 	print res_path
 	res_file = os.path.join(res_path, 'val_det.txt')
 	res_all = []
+
 	start_time = time.time()
+	predict_time = 0
 	for f in range(num_imgs):
 		filepath = val_data[f]['filepath']
 		img = cv2.imread(filepath)
@@ -69,6 +71,7 @@ for w_ind in range(51,151):
 			print("Error load image from : ", filepath)
 			print("Len val_data : ", len(val_data))
 
+		tic = time.time()
 		x_rcnn = format_img(img, C)
 		Y = model.predict(x_rcnn)
 
@@ -76,13 +79,17 @@ for w_ind in range(51,151):
 			boxes = bbox_process.parse_det_offset(Y, C, score=0.1,down=4)
 		else:
 			boxes = bbox_process.parse_det(Y, C, score=0.1, down=4, scale=C.scale)
+
+		predict_time += time.time() - tic
+
 		if len(boxes)>0:
 			f_res = np.repeat(f+1, len(boxes), axis=0).reshape((-1, 1))
 			boxes[:, [2, 3]] -= boxes[:, [0, 1]]
 			res_all += np.concatenate((f_res, boxes), axis=-1).tolist()
 
 		if (f + 1) % 10 == 0:
-			print("Predict {}/{} images done".format(f+1, num_imgs))
+			fps = (f + 1) / predict_time
+			print("Predict {}/{} images done. FPS: {:.2f}".format(f+1, num_imgs, fps))
 
 	np.savetxt(res_file, np.array(res_all), fmt='%6f')
 	print time.time() - start_time
