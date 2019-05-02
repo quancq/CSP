@@ -7,7 +7,7 @@ from keras.models import Model
 from keras_csp import config, bbox_process
 from keras_csp.utilsfunc import *
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '1'
+os.environ["CUDA_VISIBLE_DEVICES"] = '0,1'
 C = config.Config()
 C.offset = True
 cache_path = 'data/cache/cityperson/val_500'
