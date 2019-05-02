@@ -1,6 +1,7 @@
 from __future__ import division
 import os
 import time
+import my_utils
 import cPickle
 from keras.layers import Input
 from keras.models import Model
@@ -57,8 +58,9 @@ for w_ind in range(51,151):
 	res_path = os.path.join(out_path, '%03d'%int(str(w_ind)))
 	if not os.path.exists(res_path):
 		os.makedirs(res_path)
+	res_path = os.path.join(res_path, 'val_det.txt')
 	print res_path
-	res_file = os.path.join(res_path, 'val_det.txt')
+	# res_file = os.path.join(res_path, 'val_det.txt')
 	res_all = []
 
 	start_time = time.time()
@@ -83,13 +85,23 @@ for w_ind in range(51,151):
 		predict_time += time.time() - tic
 
 		if len(boxes)>0:
-			f_res = np.repeat(f+1, len(boxes), axis=0).reshape((-1, 1))
+			# f_res = np.repeat(f+1, len(boxes), axis=0).reshape((-1, 1))
+			# boxes[:, [2, 3]] -= boxes[:, [0, 1]]
+			# res_all += np.concatenate((f_res, boxes), axis=-1).tolist()
+
 			boxes[:, [2, 3]] -= boxes[:, [0, 1]]
-			res_all += np.concatenate((f_res, boxes), axis=-1).tolist()
+			img_name = os.path.basename(filepath)
+			if f == 0:
+				print(len(boxes), boxes.shape)
+			for box in boxes:
+				left, top, width, height, conf = box
+				res_all.append(dict(image_id=f+1, img_name=img_name, category_id=1, score=conf,
+                                   bbox=[left, top, width, height]))
 
 		if (f + 1) % 10 == 0:
 			fps = (f + 1) / predict_time
 			print("Predict {}/{} images done. FPS: {:.2f}".format(f+1, num_imgs, fps))
 
-	np.savetxt(res_file, np.array(res_all), fmt='%6f')
-	print time.time() - start_time
+	# np.savetxt(res_file, np.array(res_all), fmt='%6f')
+	my_utils.save_json(res_all, res_path)
+	print("Time : ", time.time() - start_time)
