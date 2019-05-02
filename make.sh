@@ -3,6 +3,6 @@ cd ./keras_csp/
 
 CUDA_PATH=/usr/local/cuda/
 
-python3 build.py build_ext --inplace
+python2 build.py build_ext --inplace
 
 cd ..
