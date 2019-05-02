@@ -41,6 +41,7 @@ else:
 if not os.path.exists(out_path):
 	os.makedirs(out_path)
 files = sorted(os.listdir(w_path))
+print files
 # get the results from epoch 51 to epoch 150
 for w_ind in range(51,151):
 	for f in files:
