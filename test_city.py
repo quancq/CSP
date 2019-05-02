@@ -66,7 +66,7 @@ for w_ind in range(51,151):
 		img = cv2.imread(filepath)
 
 		if img is None:
-			print("File path : ", filepath)
+			print("Error load image from : ", filepath)
 			print("Len val_data : ", len(val_data))
 
 		x_rcnn = format_img(img, C)
@@ -82,7 +82,7 @@ for w_ind in range(51,151):
 			res_all += np.concatenate((f_res, boxes), axis=-1).tolist()
 
 		if (f + 1) % 10 == 0:
-			print("Predict {}/{} images done".format(f+1, len(num_imgs)))
+			print("Predict {}/{} images done".format(f+1, num_imgs))
 
 	np.savetxt(res_file, np.array(res_all), fmt='%6f')
 	print time.time() - start_time
