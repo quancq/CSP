@@ -44,10 +44,13 @@ files = sorted(os.listdir(w_path))
 print files
 # get the results from epoch 51 to epoch 150
 for w_ind in range(51,151):
+	cur_file = None
 	for f in files:
 		if f.split('_')[0] == 'net' and int(f.split('_')[1][1:]) == w_ind:
 			cur_file = f
 			break
+	if cur_file is None:
+		continue
 	weight1 = os.path.join(w_path, cur_file)
 	print 'load weights from {}'.format(weight1)
 	model.load_weights(weight1, by_name=True)
