@@ -64,6 +64,11 @@ for w_ind in range(51,151):
 	for f in range(num_imgs):
 		filepath = val_data[f]['filepath']
 		img = cv2.imread(filepath)
+
+		if img is None:
+			print("File path : ", filepath)
+			print("Len val_data : ", len(val_data))
+
 		x_rcnn = format_img(img, C)
 		Y = model.predict(x_rcnn)
 
