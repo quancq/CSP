@@ -80,5 +80,9 @@ for w_ind in range(51,151):
 			f_res = np.repeat(f+1, len(boxes), axis=0).reshape((-1, 1))
 			boxes[:, [2, 3]] -= boxes[:, [0, 1]]
 			res_all += np.concatenate((f_res, boxes), axis=-1).tolist()
+
+		if (f + 1) % 50 == 0:
+			print("Predict {}/{} images done".format(f+1, len(num_imgs)))
+
 	np.savetxt(res_file, np.array(res_all), fmt='%6f')
 	print time.time() - start_time
